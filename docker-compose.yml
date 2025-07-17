@@ -13,7 +13,7 @@ services:
     volumes:
       - ewm-db-data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -30,7 +30,7 @@ services:
     volumes:
       - stats-db-data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U stats"]
+      test: [ "CMD-SHELL", "pg_isready -U stats" ]
       interval: 5s
       timeout: 5s
       retries: 5
