@@ -34,4 +34,4 @@ public class StatsController {
         List<ViewStats> stats = statsService.getStats(start, end, Optional.ofNullable(uris), unique);
         return ResponseEntity.ok(stats);
     }
-} 
+}

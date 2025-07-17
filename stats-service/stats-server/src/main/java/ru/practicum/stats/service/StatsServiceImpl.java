@@ -42,4 +42,4 @@ public class StatsServiceImpl implements StatsService {
             return repository.getStats(start, end, uriList);
         }
     }
-} 
+}

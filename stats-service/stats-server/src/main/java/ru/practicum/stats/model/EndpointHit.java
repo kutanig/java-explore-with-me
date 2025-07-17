@@ -30,4 +30,4 @@ public class EndpointHit {
 
     @Column(nullable = false)
     private LocalDateTime timestamp;
-} 
+}

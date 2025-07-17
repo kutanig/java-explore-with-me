@@ -29,4 +29,4 @@ public interface EndpointHitRepository extends JpaRepository<EndpointHit, Long> 
     List<ViewStats> getStatsUnique(@Param("start") LocalDateTime start,
                                    @Param("end") LocalDateTime end,
                                    @Param("uris") List<String> uris);
-} 
+}
