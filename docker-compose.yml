@@ -24,7 +24,7 @@ services:
       POSTGRES_USER: stats
       POSTGRES_PASSWORD: stats
     ports:
-      - "5434:5432"
+      - "5433:5432"
     volumes:
       - stats-db-data:/var/lib/postgresql/data
     healthcheck:
