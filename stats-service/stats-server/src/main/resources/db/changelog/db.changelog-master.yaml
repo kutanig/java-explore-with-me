@@ -2,7 +2,6 @@ databaseChangeLog:
   - changeSet:
       id: "1"
       author: "kutanig"
-      comment: "Creating a table for storing session statistics"
       changes:
         - createTable:
             tableName: "endpoint_hit"
