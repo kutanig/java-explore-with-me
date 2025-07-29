@@ -22,7 +22,7 @@ public class UpdateEventUserRequest {
     @Future
     private String eventDate;
 
-    private LocationDto locationDto;
+    private LocationDto location;
     private Boolean paid;
     private Integer participantLimit;
     private Boolean requestModeration;
