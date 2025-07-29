@@ -23,7 +23,7 @@ public class StatsClient {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public StatsClient(RestTemplate restTemplate,
-                       @Value("${services.stats-service.server-url:http://localhost:9090}")
+                       @Value("${stats.server.url:http://localhost:9090}")
                        String serverUrl) {
         this.restTemplate = restTemplate;
         this.serverUrl = serverUrl;
@@ -87,7 +87,9 @@ public class StatsClient {
                 .queryParam("unique", unique);
 
         if (uris != null && !uris.isEmpty()) {
-            builder.queryParam("uris", String.join(",", uris));
+            for (String uri : uris) {
+                builder.queryParam("uris", uri);
+            }
         }
 
         try {

@@ -1,0 +1,211 @@
+databaseChangeLog:
+  - changeSet:
+      id: "1"
+      author: "kutanig"
+      changes:
+        - createTable:
+            tableName: "users"
+            columns:
+              - column:
+                  name: "id"
+                  type: "BIGSERIAL"
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: "name"
+                  type: "VARCHAR(250)"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: "email"
+                  type: "VARCHAR(254)"
+                  constraints:
+                    nullable: false
+                    unique: true
+
+  - changeSet:
+      id: "2"
+      author: "kutanig"
+      changes:
+        - createTable:
+            tableName: "categories"
+            columns:
+              - column:
+                  name: "id"
+                  type: "BIGSERIAL"
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: "name"
+                  type: "VARCHAR(50)"
+                  constraints:
+                    nullable: false
+                    unique: true
+
+  - changeSet:
+      id: "3"
+      author: "kutanig"
+      changes:
+        - createTable:
+            tableName: "events"
+            columns:
+              - column:
+                  name: "id"
+                  type: "BIGSERIAL"
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: "annotation"
+                  type: "VARCHAR(2000)"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: "category_id"
+                  type: "BIGINT"
+                  constraints:
+                    nullable: false
+                    foreignKeyName: "fk_events_category"
+                    references: "categories(id)"
+              - column:
+                  name: "description"
+                  type: "VARCHAR(7000)"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: "event_date"
+                  type: "TIMESTAMP"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: "initiator_id"
+                  type: "BIGINT"
+                  constraints:
+                    nullable: false
+                    foreignKeyName: "fk_events_initiator"
+                    references: "users(id)"
+              - column:
+                  name: "lat"
+                  type: "FLOAT"
+              - column:
+                  name: "lon"
+                  type: "FLOAT"
+              - column:
+                  name: "paid"
+                  type: "BOOLEAN"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: "participant_limit"
+                  type: "INTEGER"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: "request_moderation"
+                  type: "BOOLEAN"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: "title"
+                  type: "VARCHAR(120)"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: "state"
+                  type: "VARCHAR(20)"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: "created_on"
+                  type: "TIMESTAMP"
+              - column:
+                  name: "published_on"
+                  type: "TIMESTAMP"
+
+  - changeSet:
+      id: "4"
+      author: "kutanig"
+      changes:
+        - createTable:
+            tableName: "participation_requests"
+            columns:
+              - column:
+                  name: "id"
+                  type: "BIGSERIAL"
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: "created"
+                  type: "TIMESTAMP"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: "event_id"
+                  type: "BIGINT"
+                  constraints:
+                    nullable: false
+                    foreignKeyName: "fk_requests_event"
+                    references: "events(id)"
+              - column:
+                  name: "requester_id"
+                  type: "BIGINT"
+                  constraints:
+                    nullable: false
+                    foreignKeyName: "fk_requests_requester"
+                    references: "users(id)"
+              - column:
+                  name: "status"
+                  type: "VARCHAR(20)"
+
+  - changeSet:
+      id: "5"
+      author: "kutanig"
+      changes:
+        - createTable:
+            tableName: "compilations"
+            columns:
+              - column:
+                  name: "id"
+                  type: "BIGSERIAL"
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: "title"
+                  type: "VARCHAR(50)"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: "pinned"
+                  type: "BOOLEAN"
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: "6"
+      author: "kutanig"
+      changes:
+        - createTable:
+            tableName: "compilation_events"
+            columns:
+              - column:
+                  name: "compilation_id"
+                  type: "BIGINT"
+                  constraints:
+                    nullable: false
+                    foreignKeyName: "fk_compilation_events_compilation"
+                    references: "compilations(id)"
+              - column:
+                  name: "event_id"
+                  type: "BIGINT"
+                  constraints:
+                    nullable: false
+                    foreignKeyName: "fk_compilation_events_event"
+                    references: "events(id)"
+        - addPrimaryKey:
+            tableName: "compilation_events"
+            columnNames: "compilation_id, event_id"
+            constraintName: "pk_compilation_events" 
