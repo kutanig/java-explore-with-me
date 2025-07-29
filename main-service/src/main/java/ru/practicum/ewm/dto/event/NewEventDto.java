@@ -5,13 +5,15 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.ewm.dto.location.Location;
+import ru.practicum.ewm.dto.location.LocationDto;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class NewEventDto {
     @NotBlank
     @Size(min = 20, max = 2000)
@@ -29,7 +31,7 @@ public class NewEventDto {
     private String eventDate;
 
     @NotNull
-    private Location location;
+    private LocationDto locationDto;
 
     private Boolean paid = false;
     private Integer participantLimit = 0;

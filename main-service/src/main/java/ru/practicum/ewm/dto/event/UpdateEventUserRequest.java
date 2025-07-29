@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.ewm.dto.location.Location;
+import ru.practicum.ewm.dto.location.LocationDto;
 
 @Data
 @NoArgsConstructor
@@ -22,7 +22,7 @@ public class UpdateEventUserRequest {
     @Future
     private String eventDate;
 
-    private Location location;
+    private LocationDto locationDto;
     private Boolean paid;
     private Integer participantLimit;
     private Boolean requestModeration;

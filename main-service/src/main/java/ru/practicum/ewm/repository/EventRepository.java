@@ -18,6 +18,10 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     List<Event> findByInitiatorId(Long userId, Pageable pageable);
 
+    boolean existsByCategoryId(Long categoryId);
+
+    Optional<Event> findByIdAndInitiatorId(Long eventId, Long initiatorId);
+
     @Query("SELECT e FROM Event e " +
             "WHERE e.state = 'PUBLISHED' " +
             "AND (:text IS NULL OR LOWER(e.annotation) LIKE LOWER(CONCAT('%', :text, '%')) OR LOWER(e.description) LIKE LOWER(CONCAT('%', :text, '%'))) " +

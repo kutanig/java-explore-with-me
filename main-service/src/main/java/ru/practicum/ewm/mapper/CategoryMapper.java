@@ -6,7 +6,7 @@ import ru.practicum.ewm.model.category.Category;
 
 @Component
 public class CategoryMapper {
-    private CategoryDto mapToCategoryDto(Category category) {
+    public CategoryDto mapToCategoryDto(Category category) {
         return new CategoryDto(category.getId(), category.getName());
     }
 }
