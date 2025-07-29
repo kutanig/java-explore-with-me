@@ -1,6 +1,5 @@
 package ru.practicum.ewm.dto.event;
 
-import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -27,7 +26,6 @@ public class NewEventDto {
     private String description;
 
     @NotNull
-    @Future
     private String eventDate;
 
     @NotNull

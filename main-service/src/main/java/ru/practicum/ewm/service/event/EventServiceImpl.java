@@ -226,8 +226,8 @@ public class EventServiceImpl implements EventService {
             }
             event.setEventDate(eventDate);
         }
-        if (updateRequest.getLocation() != null) {
-            event.setLocation(locationMapper.toModel(updateRequest.getLocation()));
+        if (updateRequest.getLocationDto() != null) {
+            event.setLocation(locationMapper.toModel(updateRequest.getLocationDto()));
         }
         if (updateRequest.getPaid() != null) {
             event.setPaid(updateRequest.getPaid());
@@ -384,8 +384,8 @@ public class EventServiceImpl implements EventService {
             }
             event.setEventDate(eventDate);
         }
-        if (updateRequest.getLocation() != null) {
-            event.setLocation(locationMapper.toModel(updateRequest.getLocation()));
+        if (updateRequest.getLocationDto() != null) {
+            event.setLocation(locationMapper.toModel(updateRequest.getLocationDto()));
         }
         if (updateRequest.getPaid() != null) {
             event.setPaid(updateRequest.getPaid());

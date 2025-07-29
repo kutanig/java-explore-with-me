@@ -22,12 +22,12 @@ public class CompilationMapper {
             return null;
         }
 
-        List<EventShortDto> eventDtos = compilation.getEvents().stream()
+        List<EventShortDto> eventDtos = (compilation.getEvents() != null ? compilation.getEvents().stream()
                 .map(event -> eventMapper.toShortDto(
                         event,
                         confirmedRequests.getOrDefault(event.getId(), 0L),
                         views.getOrDefault(event.getId(), 0L)))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()) : List.of());
 
         return CompilationDto.builder()
                 .id(compilation.getId())
