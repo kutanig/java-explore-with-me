@@ -29,7 +29,6 @@ public class NewEventDto {
     @NotNull
     private String eventDate;
 
-    @NotNull
     private LocationDto locationDto;
 
     private Boolean paid = false;

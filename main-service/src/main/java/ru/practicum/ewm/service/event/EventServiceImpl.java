@@ -169,7 +169,7 @@ public class EventServiceImpl implements EventService {
                 .description(newEventDto.getDescription())
                 .eventDate(eventDate)
                 .initiator(user)
-                .location(locationMapper.toModel(newEventDto.getLocationDto()))
+                .location(newEventDto.getLocationDto() != null ? locationMapper.toModel(newEventDto.getLocationDto()) : null)
                 .paid(newEventDto.getPaid() != null ? newEventDto.getPaid() : false)
                 .participantLimit(newEventDto.getParticipantLimit() != null ? newEventDto.getParticipantLimit() : 0)
                 .requestModeration(newEventDto.getRequestModeration() != null ? newEventDto.getRequestModeration() : true)
@@ -181,7 +181,9 @@ public class EventServiceImpl implements EventService {
         Event savedEvent = eventRepository.save(event);
         log.info("Created event with id: {}", savedEvent.getId());
         
-        return eventMapper.toFullDto(savedEvent, 0L, 0L);
+        long views = statsClient.getViews(APP_NAME, savedEvent.getId(), LocalDateTime.now().minusYears(1), LocalDateTime.now(), true);
+        
+        return eventMapper.toFullDto(savedEvent, 0L, views);
     }
 
     @Override
@@ -194,8 +196,10 @@ public class EventServiceImpl implements EventService {
         
         long confirmedRequests = requestRepository.countByEventIdAndStatus(eventId, ParticipationRequestStatus.CONFIRMED);
         
+        long views = statsClient.getViews(APP_NAME, eventId, LocalDateTime.now().minusYears(1), LocalDateTime.now(), true);
+        
         log.info("Found event: {}", event.getTitle());
-        return eventMapper.toFullDto(event, confirmedRequests, 0L);
+        return eventMapper.toFullDto(event, confirmedRequests, views);
     }
 
     @Override
@@ -259,8 +263,10 @@ public class EventServiceImpl implements EventService {
         Event savedEvent = eventRepository.save(event);
         long confirmedRequests = requestRepository.countByEventIdAndStatus(eventId, ParticipationRequestStatus.CONFIRMED);
         
+        long views = statsClient.getViews(APP_NAME, eventId, LocalDateTime.now().minusYears(1), LocalDateTime.now(), true);
+        
         log.info("Updated event: {}", savedEvent.getTitle());
-        return eventMapper.toFullDto(savedEvent, confirmedRequests, 0L);
+        return eventMapper.toFullDto(savedEvent, confirmedRequests, views);
     }
 
     @Override
