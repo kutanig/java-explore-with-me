@@ -6,22 +6,22 @@ import java.util.List;
 public interface ValidationService {
 
     void validatePublicEventsSearchParams(String text,
-                                         List<Long> categories,
-                                         Boolean paid,
-                                         LocalDateTime rangeStart,
-                                         LocalDateTime rangeEnd,
-                                         Boolean onlyAvailable,
-                                         String sort,
-                                         Integer from,
-                                         Integer size);
+                                          List<Long> categories,
+                                          Boolean paid,
+                                          LocalDateTime rangeStart,
+                                          LocalDateTime rangeEnd,
+                                          Boolean onlyAvailable,
+                                          String sort,
+                                          Integer from,
+                                          Integer size);
 
     void validateAdminEventsSearchParams(List<Long> users,
-                                        List<String> states,
-                                        List<Long> categories,
-                                        LocalDateTime rangeStart,
-                                        LocalDateTime rangeEnd,
-                                        Integer from,
-                                        Integer size);
+                                         List<String> states,
+                                         List<Long> categories,
+                                         LocalDateTime rangeStart,
+                                         LocalDateTime rangeEnd,
+                                         Integer from,
+                                         Integer size);
 
     void validateDateRange(LocalDateTime rangeStart, LocalDateTime rangeEnd);
 

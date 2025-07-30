@@ -66,7 +66,7 @@ public class CategoryServiceImpl implements CategoryService {
                     log.error("Category not found with ID: {}", catId);
                     return new NotFoundException("Category not found");
                 });
-        
+
         validationService.validateCategoryName(categoryDto.getName());
         category.setName(categoryDto.getName());
         Category updatedCategory = categoryRepository.save(category);

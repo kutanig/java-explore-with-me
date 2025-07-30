@@ -12,7 +12,10 @@ import ru.practicum.stats.dto.ViewStats;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -47,7 +50,6 @@ public class StatsClient {
             log.debug("Successfully sent hit to stats service");
         } catch (Exception e) {
             log.warn("Failed to send hit to stats service: {}", e.getMessage());
-            // Не выбрасываем исключение, чтобы не ломать основной функционал
         }
     }
 
@@ -102,7 +104,6 @@ public class StatsClient {
             return stats;
         } catch (Exception e) {
             log.warn("Failed to get stats from stats service: {}", e.getMessage());
-            // Возвращаем пустой список вместо выбрасывания исключения
             return Collections.emptyList();
         }
     }

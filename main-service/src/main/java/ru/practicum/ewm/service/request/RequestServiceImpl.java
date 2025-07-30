@@ -13,7 +13,9 @@ import ru.practicum.ewm.model.event.EventState;
 import ru.practicum.ewm.model.participationRequest.ParticipationRequest;
 import ru.practicum.ewm.model.participationRequest.ParticipationRequestStatus;
 import ru.practicum.ewm.model.user.User;
-import ru.practicum.ewm.repository.*;
+import ru.practicum.ewm.repository.EventRepository;
+import ru.practicum.ewm.repository.RequestRepository;
+import ru.practicum.ewm.repository.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;

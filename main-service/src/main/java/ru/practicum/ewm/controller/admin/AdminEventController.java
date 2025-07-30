@@ -29,7 +29,7 @@ public class AdminEventController {
                                         @RequestParam(defaultValue = "10") Integer size) {
 
         validationService.validateAdminEventsSearchParams(users, states, categories, rangeStart, rangeEnd, from, size);
-        
+
         return eventService.getAdminEvents(users, states, categories, rangeStart, rangeEnd, from, size);
     }
 

@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 import ru.practicum.ewm.model.participationRequest.ParticipationRequest;
 import ru.practicum.ewm.model.participationRequest.ParticipationRequestStatus;
 
-
 import java.util.List;
 import java.util.Optional;
 
@@ -40,6 +39,7 @@ public interface RequestRepository extends JpaRepository<ParticipationRequest, L
 
     interface RequestCountProjection {
         Long getEventId();
+
         Long getCount();
     }
 }

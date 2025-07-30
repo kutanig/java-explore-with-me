@@ -37,7 +37,7 @@ public class NewEventDto {
 
     @Min(0)
     private Integer participantLimit = 0;
-    
+
     private Boolean requestModeration = true;
 
     @NotBlank

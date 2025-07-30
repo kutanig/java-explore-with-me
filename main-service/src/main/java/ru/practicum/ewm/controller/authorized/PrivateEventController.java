@@ -25,7 +25,7 @@ public class PrivateEventController {
                                              @RequestParam(defaultValue = "10") Integer size) {
 
         validationService.validatePaginationParams(from, size);
-        
+
         return eventService.getUserEvents(userId, from, size);
     }
 

@@ -12,14 +12,14 @@ import java.util.List;
 public class ValidationServiceImpl implements ValidationService {
 
     public void validatePublicEventsSearchParams(String text,
-                                               List<Long> categories,
-                                               Boolean paid,
-                                               LocalDateTime rangeStart,
-                                               LocalDateTime rangeEnd,
-                                               Boolean onlyAvailable,
-                                               String sort,
-                                               Integer from,
-                                               Integer size) {
+                                                 List<Long> categories,
+                                                 Boolean paid,
+                                                 LocalDateTime rangeStart,
+                                                 LocalDateTime rangeEnd,
+                                                 Boolean onlyAvailable,
+                                                 String sort,
+                                                 Integer from,
+                                                 Integer size) {
 
         validateDateRange(rangeStart, rangeEnd);
 
@@ -50,12 +50,12 @@ public class ValidationServiceImpl implements ValidationService {
     }
 
     public void validateAdminEventsSearchParams(List<Long> users,
-                                              List<String> states,
-                                              List<Long> categories,
-                                              LocalDateTime rangeStart,
-                                              LocalDateTime rangeEnd,
-                                              Integer from,
-                                              Integer size) {
+                                                List<String> states,
+                                                List<Long> categories,
+                                                LocalDateTime rangeStart,
+                                                LocalDateTime rangeEnd,
+                                                Integer from,
+                                                Integer size) {
 
         validateDateRange(rangeStart, rangeEnd);
 
