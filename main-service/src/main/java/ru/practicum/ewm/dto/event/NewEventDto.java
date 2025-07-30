@@ -1,5 +1,6 @@
 package ru.practicum.ewm.dto.event;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -32,7 +33,10 @@ public class NewEventDto {
     private LocationDto locationDto;
 
     private Boolean paid = false;
+    
+    @Min(0)
     private Integer participantLimit = 0;
+    
     private Boolean requestModeration = true;
 
     @NotBlank

@@ -1,5 +1,6 @@
 package ru.practicum.ewm.controller.authorized;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class PrivateRequestController {
 
     @PostMapping
     public ResponseEntity<ParticipationRequestDto> addParticipationRequest(@PathVariable Long userId,
-                                                                           @RequestParam Long eventId) {
+                                                                           @RequestParam @NotNull Long eventId) {
         return ResponseEntity.status(HttpStatus.CREATED).body(requestService.addParticipationRequest(userId, eventId));
     }
 
