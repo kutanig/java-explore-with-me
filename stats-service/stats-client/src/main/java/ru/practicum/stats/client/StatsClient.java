@@ -56,7 +56,7 @@ public class StatsClient {
     public Long getViews(String appName, Long eventId, LocalDateTime start, LocalDateTime end, boolean unique) {
         List<String> uris = List.of("/events/" + eventId);
         List<ViewStats> stats = getStats(appName, start, end, uris, unique);
-        
+
         String targetUri = "/events/" + eventId;
         return stats.stream()
                 .filter(stat -> targetUri.equals(stat.getUri()))
@@ -107,8 +107,8 @@ public class StatsClient {
                     builder.toUriString(),
                     ViewStats[].class);
             List<ViewStats> stats = Arrays.asList(response.getBody());
-            
-            log.debug("Successfully retrieved {} stats records for app {}", 
+
+            log.debug("Successfully retrieved {} stats records for app {}",
                     stats.size(), appName);
             return stats;
         } catch (Exception e) {

@@ -51,7 +51,7 @@ public class StatsServiceImpl implements StatsService {
         if (uriList != null && uriList.isEmpty()) {
             uriList = null;
         }
-        
+
         List<ViewStats> stats;
 
         if (unique) {
