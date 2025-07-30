@@ -205,7 +205,6 @@ public class EventServiceImpl implements EventService {
         Event event = eventRepository.findByIdAndInitiatorId(eventId, userId)
                 .orElseThrow(() -> new NotFoundException("Event with id=" + eventId + " was not found"));
 
-        // Проверяем, что событие можно изменять
         if (event.getState() == EventState.PUBLISHED) {
             throw new ConflictException("Only pending or canceled events can be changed");
         }
@@ -244,7 +243,6 @@ public class EventServiceImpl implements EventService {
             event.setTitle(updateRequest.getTitle());
         }
 
-        // Обработка stateAction
         if (updateRequest.getStateAction() != null) {
             switch (updateRequest.getStateAction()) {
                 case "SEND_TO_REVIEW":
