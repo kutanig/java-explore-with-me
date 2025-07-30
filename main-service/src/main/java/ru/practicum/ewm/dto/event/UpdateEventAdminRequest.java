@@ -1,6 +1,7 @@
 package ru.practicum.ewm.dto.event;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -25,7 +26,8 @@ public class UpdateEventAdminRequest {
 
     private String eventDate;
 
-    private LocationDto locationDto;
+    @Valid
+    private LocationDto location;
 
     private Boolean paid;
     

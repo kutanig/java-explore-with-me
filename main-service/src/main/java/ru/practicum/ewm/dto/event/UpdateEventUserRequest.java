@@ -1,5 +1,6 @@
 package ru.practicum.ewm.dto.event;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -24,7 +25,8 @@ public class UpdateEventUserRequest {
 
     private String eventDate;
 
-    private LocationDto locationDto;
+    @Valid
+    private LocationDto location;
 
     private Boolean paid;
     
