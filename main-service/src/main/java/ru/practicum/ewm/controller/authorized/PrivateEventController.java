@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.dto.event.*;
 import ru.practicum.ewm.dto.participationRequest.ParticipationRequestDto;
 import ru.practicum.ewm.service.event.EventService;
+import ru.practicum.ewm.service.validation.ValidationService;
 
 import java.util.List;
 
@@ -16,11 +17,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PrivateEventController {
     private final EventService eventService;
+    private final ValidationService validationService;
 
     @GetMapping
     public List<EventShortDto> getUserEvents(@PathVariable Long userId,
                                              @RequestParam(defaultValue = "0") Integer from,
                                              @RequestParam(defaultValue = "10") Integer size) {
+
+        validationService.validatePaginationParams(from, size);
+        
         return eventService.getUserEvents(userId, from, size);
     }
 

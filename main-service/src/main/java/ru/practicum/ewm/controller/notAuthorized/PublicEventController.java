@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.dto.event.EventFullDto;
 import ru.practicum.ewm.dto.event.EventShortDto;
 import ru.practicum.ewm.service.event.EventService;
+import ru.practicum.ewm.service.validation.ValidationService;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PublicEventController {
     private final EventService eventService;
+    private final ValidationService validationService;
 
     @GetMapping
     public List<EventShortDto> getEvents(@RequestParam(required = false) String text,
@@ -28,6 +30,9 @@ public class PublicEventController {
                                          @RequestParam(defaultValue = "0") Integer from,
                                          @RequestParam(defaultValue = "10") Integer size,
                                          HttpServletRequest request) {
+
+        validationService.validatePublicEventsSearchParams(text, categories, paid, rangeStart, rangeEnd,
+                onlyAvailable, sort, from, size);
 
         return eventService.searchPublicEvents(text, categories, paid, rangeStart, rangeEnd,
                 onlyAvailable, sort, from, size, request);
