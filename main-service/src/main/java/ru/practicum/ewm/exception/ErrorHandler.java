@@ -43,7 +43,7 @@ public class ErrorHandler {
         return new ApiError(
                 Collections.emptyList(),
                 e.getMessage(),
-                "Integrity constraint has been violated.",
+                "For the requested operation the conditions are not met.",
                 "CONFLICT",
                 LocalDateTime.now().format(FORMATTER)
         );
@@ -187,6 +187,19 @@ public class ErrorHandler {
                 e.getMessage(),
                 "Incorrectly made request.",
                 "BAD_REQUEST",
+                LocalDateTime.now().format(FORMATTER)
+        );
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ApiError handleRuntimeException(final RuntimeException e) {
+        log.error("Runtime exception: ", e);
+        return new ApiError(
+                Collections.singletonList(e.getMessage()),
+                "Internal server error.",
+                "Internal server error.",
+                "INTERNAL_SERVER_ERROR",
                 LocalDateTime.now().format(FORMATTER)
         );
     }

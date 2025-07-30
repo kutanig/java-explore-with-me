@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import ru.practicum.ewm.exception.BadRequestException;
 
 @Slf4j
 @Service
@@ -204,8 +205,9 @@ public class EventServiceImpl implements EventService {
         Event event = eventRepository.findByIdAndInitiatorId(eventId, userId)
                 .orElseThrow(() -> new NotFoundException("Event with id=" + eventId + " was not found"));
 
+        // Проверяем, что событие можно изменять
         if (event.getState() == EventState.PUBLISHED) {
-            throw new ConflictException("Cannot update published event");
+            throw new ConflictException("Only pending or canceled events can be changed");
         }
 
         if (updateRequest.getAnnotation() != null) {
@@ -242,8 +244,18 @@ public class EventServiceImpl implements EventService {
             event.setTitle(updateRequest.getTitle());
         }
 
-        if (event.getState() == EventState.CANCELED) {
-            event.setState(EventState.PENDING);
+        // Обработка stateAction
+        if (updateRequest.getStateAction() != null) {
+            switch (updateRequest.getStateAction()) {
+                case "SEND_TO_REVIEW":
+                    event.setState(EventState.PENDING);
+                    break;
+                case "CANCEL_REVIEW":
+                    event.setState(EventState.CANCELED);
+                    break;
+                default:
+                    throw new BadRequestException("Invalid state action: " + updateRequest.getStateAction());
+            }
         }
         
         Event savedEvent = eventRepository.save(event);

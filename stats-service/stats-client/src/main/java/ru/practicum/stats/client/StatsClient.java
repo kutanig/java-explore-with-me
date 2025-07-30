@@ -44,9 +44,10 @@ public class StatsClient {
         log.debug("Sending hit to stats service: {}", hit);
         try {
             restTemplate.postForEntity(serverUrl + "/hit", hit, Void.class);
+            log.debug("Successfully sent hit to stats service");
         } catch (Exception e) {
-            log.error("Failed to send hit to stats service", e);
-            throw new RuntimeException("Failed to save hit to stats service", e);
+            log.warn("Failed to send hit to stats service: {}", e.getMessage());
+            // Не выбрасываем исключение, чтобы не ломать основной функционал
         }
     }
 
@@ -96,10 +97,13 @@ public class StatsClient {
             ResponseEntity<ViewStats[]> response = restTemplate.getForEntity(
                     builder.toUriString(),
                     ViewStats[].class);
-            return Arrays.asList(response.getBody());
+            List<ViewStats> stats = Arrays.asList(response.getBody());
+            log.debug("Successfully retrieved {} stats records", stats.size());
+            return stats;
         } catch (Exception e) {
-            log.error("Failed to get stats from stats service", e);
-            throw new RuntimeException("Failed to get stats from stats service", e);
+            log.warn("Failed to get stats from stats service: {}", e.getMessage());
+            // Возвращаем пустой список вместо выбрасывания исключения
+            return Collections.emptyList();
         }
     }
 
