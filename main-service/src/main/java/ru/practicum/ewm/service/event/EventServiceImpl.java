@@ -20,6 +20,7 @@ import ru.practicum.ewm.model.participationRequest.ParticipationRequest;
 import ru.practicum.ewm.model.participationRequest.ParticipationRequestStatus;
 import ru.practicum.ewm.model.user.User;
 import ru.practicum.ewm.repository.*;
+import ru.practicum.ewm.service.validation.ValidationService;
 import ru.practicum.stats.client.StatsClient;
 
 import java.time.LocalDateTime;
@@ -44,6 +45,7 @@ public class EventServiceImpl implements EventService {
     private final LocationMapper locationMapper;
     private final RequestMapper requestMapper;
     private final StatsClient statsClient;
+    private final ValidationService validationService;
     
     private static final String APP_NAME = "ewm-main-service";
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -60,7 +62,7 @@ public class EventServiceImpl implements EventService {
 
         long confirmedRequests = requestRepository.countByEventIdAndStatus(id, ParticipationRequestStatus.CONFIRMED);
 
-        long views = statsClient.getViews(APP_NAME, id, LocalDateTime.now().minusYears(1), LocalDateTime.now(), true);
+        long views = statsClient.getViews(APP_NAME, id, LocalDateTime.now().withHour(0).withMinute(0).withSecond(0), LocalDateTime.now(), false);
         
         log.info("Found public event: {}", event.getTitle());
         return eventMapper.toFullDto(event, confirmedRequests, views);
@@ -159,9 +161,7 @@ public class EventServiceImpl implements EventService {
                 .orElseThrow(() -> new NotFoundException("Category with id=" + newEventDto.getCategory() + " was not found"));
 
         LocalDateTime eventDate = LocalDateTime.parse(newEventDto.getEventDate(), FORMATTER);
-        if (eventDate.isBefore(LocalDateTime.now().plusHours(2))) {
-            throw new ConflictException("Event date must be at least 2 hours in the future");
-        }
+        validationService.validateEventDate(eventDate);
         
         Event event = Event.builder()
                 .annotation(newEventDto.getAnnotation())
@@ -226,9 +226,7 @@ public class EventServiceImpl implements EventService {
         }
         if (updateRequest.getEventDate() != null) {
             LocalDateTime eventDate = LocalDateTime.parse(updateRequest.getEventDate(), FORMATTER);
-            if (eventDate.isBefore(LocalDateTime.now().plusHours(2))) {
-                throw new ConflictException("Event date must be at least 2 hours in the future");
-            }
+            validationService.validateEventDateForUpdate(eventDate);
             event.setEventDate(eventDate);
         }
         if (updateRequest.getLocation() != null) {
@@ -395,9 +393,7 @@ public class EventServiceImpl implements EventService {
         }
         if (updateRequest.getEventDate() != null) {
             LocalDateTime eventDate = LocalDateTime.parse(updateRequest.getEventDate(), FORMATTER);
-            if (eventDate.isBefore(LocalDateTime.now().plusHours(1))) {
-                throw new ConflictException("Event date must be at least 1 hour in the future");
-            }
+            validationService.validateEventDateForUpdate(eventDate);
             event.setEventDate(eventDate);
         }
         if (updateRequest.getLocation() != null) {

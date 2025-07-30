@@ -13,6 +13,7 @@ import ru.practicum.ewm.mapper.CategoryMapper;
 import ru.practicum.ewm.model.category.Category;
 import ru.practicum.ewm.repository.CategoryRepository;
 import ru.practicum.ewm.repository.EventRepository;
+import ru.practicum.ewm.service.validation.ValidationService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,10 +25,13 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
     private final EventRepository eventRepository;
     private final CategoryMapper categoryMapper;
+    private final ValidationService validationService;
 
     @Override
     public CategoryDto addCategory(NewCategoryDto newCategoryDto) {
         log.info("Adding new category with name: {}", newCategoryDto.getName());
+
+        validationService.validateCategoryName(newCategoryDto.getName());
 
         if (categoryRepository.existsByName(newCategoryDto.getName())) {
             log.warn("Category with name {} already exists", newCategoryDto.getName());
@@ -62,6 +66,8 @@ public class CategoryServiceImpl implements CategoryService {
                     log.error("Category not found with ID: {}", catId);
                     return new NotFoundException("Category not found");
                 });
+        
+        validationService.validateCategoryName(categoryDto.getName());
         category.setName(categoryDto.getName());
         Category updatedCategory = categoryRepository.save(category);
         log.debug("Category with ID {} updated successfully", catId);

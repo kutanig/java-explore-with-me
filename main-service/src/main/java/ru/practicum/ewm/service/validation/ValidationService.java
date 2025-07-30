@@ -30,4 +30,19 @@ public interface ValidationService {
     void validatePaginationParams(Integer from, Integer size);
 
     void validateEventStates(List<String> states);
+
+    /**
+     * Валидация даты события - должна быть в будущем
+     */
+    void validateEventDate(LocalDateTime eventDate);
+
+    /**
+     * Валидация даты события для обновления - должна быть в будущем
+     */
+    void validateEventDateForUpdate(LocalDateTime eventDate);
+
+    /**
+     * Валидация названия категории
+     */
+    void validateCategoryName(String name);
 } 

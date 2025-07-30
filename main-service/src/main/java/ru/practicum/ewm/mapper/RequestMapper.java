@@ -6,12 +6,14 @@ import ru.practicum.ewm.model.participationRequest.ParticipationRequest;
 
 import java.time.format.DateTimeFormatter;
 
+import static java.time.format.DateTimeFormatter.ofPattern;
+
 @Component
 public class RequestMapper {
     public ParticipationRequestDto mapToParticipationRequestDto(ParticipationRequest request) {
         return ParticipationRequestDto.builder()
                 .id(request.getId())
-                .created(request.getCreated().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+                .created(request.getCreated().format(ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSS")))
                 .event(request.getEvent().getId())
                 .requester(request.getRequester().getId())
                 .status(request.getStatus().name())

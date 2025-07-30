@@ -9,7 +9,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ValidationServiceImp implements ValidationService {
+public class ValidationServiceImpl implements ValidationService {
 
     public void validatePublicEventsSearchParams(String text,
                                                List<Long> categories,
@@ -73,6 +73,27 @@ public class ValidationServiceImp implements ValidationService {
                     throw new BadRequestException("Invalid event state: " + state);
                 }
             }
+        }
+    }
+
+    @Override
+    public void validateEventDate(LocalDateTime eventDate) {
+        if (eventDate != null && eventDate.isBefore(LocalDateTime.now().plusHours(2))) {
+            throw new BadRequestException("Event date must be at least 2 hours in the future");
+        }
+    }
+
+    @Override
+    public void validateEventDateForUpdate(LocalDateTime eventDate) {
+        if (eventDate != null && eventDate.isBefore(LocalDateTime.now().plusHours(2))) {
+            throw new BadRequestException("Event date must be at least 2 hours in the future");
+        }
+    }
+
+    @Override
+    public void validateCategoryName(String name) {
+        if (name != null && (name.length() < 1 || name.length() > 50)) {
+            throw new BadRequestException("Category name must be between 1 and 50 characters");
         }
     }
 } 
