@@ -63,11 +63,11 @@ public class EventServiceImpl implements EventService {
         Event event = eventRepository.findByIdAndState(id, EventState.PUBLISHED)
                 .orElseThrow(() -> new NotFoundException("Event with id=" + id + " was not found"));
 
-        statsClient.recordHit(APP_NAME, request.getRequestURI(), request.getRemoteAddr(), LocalDateTime.now());
-
         long confirmedRequests = requestRepository.countByEventIdAndStatus(id, ParticipationRequestStatus.CONFIRMED);
 
-        long views = statsClient.getViews(APP_NAME, id, LocalDateTime.now().withHour(0).withMinute(0).withSecond(0), LocalDateTime.now(), false);
+        long views = statsClient.getViews(APP_NAME, id, LocalDateTime.of(2020, 1, 1, 0, 0, 0), LocalDateTime.now(), true);
+
+        statsClient.recordHit(APP_NAME, request.getRequestURI(), request.getRemoteAddr(), LocalDateTime.now());
 
         log.info("Found public event: {}", event.getTitle());
         return eventMapper.toFullDto(event, confirmedRequests, views);
@@ -115,7 +115,7 @@ public class EventServiceImpl implements EventService {
         List<Long> eventIds = events.stream().map(Event::getId).collect(Collectors.toList());
 
         Map<Long, Long> viewsMap = statsClient.getViewsForEvents(APP_NAME, eventIds,
-                LocalDateTime.now().minusYears(1), LocalDateTime.now(), true);
+                LocalDateTime.of(2020, 1, 1, 0, 0, 0), LocalDateTime.now(), true);
 
         Map<Long, Long> confirmedRequestsMap = eventIds.stream()
                 .collect(Collectors.toMap(
@@ -186,7 +186,7 @@ public class EventServiceImpl implements EventService {
         Event savedEvent = eventRepository.save(event);
         log.info("Created event with id: {}", savedEvent.getId());
 
-        long views = statsClient.getViews(APP_NAME, savedEvent.getId(), LocalDateTime.now().minusYears(1), LocalDateTime.now(), true);
+        long views = statsClient.getViews(APP_NAME, savedEvent.getId(), LocalDateTime.of(2020, 1, 1, 0, 0, 0), LocalDateTime.now(), true);
 
         return eventMapper.toFullDto(savedEvent, 0L, views);
     }
@@ -201,7 +201,7 @@ public class EventServiceImpl implements EventService {
 
         long confirmedRequests = requestRepository.countByEventIdAndStatus(eventId, ParticipationRequestStatus.CONFIRMED);
 
-        long views = statsClient.getViews(APP_NAME, eventId, LocalDateTime.now().minusYears(1), LocalDateTime.now(), true);
+        long views = statsClient.getViews(APP_NAME, eventId, LocalDateTime.of(2020, 1, 1, 0, 0, 0), LocalDateTime.now(), true);
 
         log.info("Found event: {}", event.getTitle());
         return eventMapper.toFullDto(event, confirmedRequests, views);
@@ -266,7 +266,7 @@ public class EventServiceImpl implements EventService {
         Event savedEvent = eventRepository.save(event);
         long confirmedRequests = requestRepository.countByEventIdAndStatus(eventId, ParticipationRequestStatus.CONFIRMED);
 
-        long views = statsClient.getViews(APP_NAME, eventId, LocalDateTime.now().minusYears(1), LocalDateTime.now(), true);
+        long views = statsClient.getViews(APP_NAME, eventId, LocalDateTime.of(2020, 1, 1, 0, 0, 0), LocalDateTime.now(), true);
 
         log.info("Updated event: {}", savedEvent.getTitle());
         return eventMapper.toFullDto(savedEvent, confirmedRequests, views);
@@ -374,7 +374,7 @@ public class EventServiceImpl implements EventService {
         return events.stream()
                 .map(event -> eventMapper.toFullDto(event,
                         confirmedRequestsMap.get(event.getId()),
-                        0L)) // Просмотры не нужны для админских событий
+                        0L))
                 .collect(Collectors.toList());
     }
 

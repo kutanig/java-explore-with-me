@@ -32,20 +32,30 @@ public class StatsController {
 
     @GetMapping("/stats")
     public ResponseEntity<List<ViewStats>> getStats(
-            @RequestParam("start") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime start,
-            @RequestParam("end") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime end,
+            @RequestParam("start") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime start,
+            @RequestParam("end") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime end,
             @RequestParam(value = "uris", required = false) List<String> uris,
-            @RequestParam(value = "unique", required = false, defaultValue = "false") Boolean unique
+            @RequestParam(value = "unique", required = false, defaultValue = "false") Boolean unique,
+            @RequestParam(value = "app", required = false) String app
     ) {
-        log.info("Received stats request: start={}, end={}, uris={}, unique={}",
-                start, end, uris, unique);
+        log.info("Received stats request: start={}, end={}, uris={}, unique={}, app={}",
+                start, end, uris, unique, app);
 
         if (start.isAfter(end)) {
             log.warn("Invalid time range: start date {} is after end date {}", start, end);
             throw new IllegalArgumentException("Start date must be before end date");
         }
 
-        List<ViewStats> stats = statsService.getStats(start, end, Optional.ofNullable(uris), unique);
+        Optional<List<String>> urisOptional = Optional.ofNullable(uris);
+        if (urisOptional.isPresent() && urisOptional.get().isEmpty()) {
+            urisOptional = Optional.empty();
+        }
+
+        if (app == null) {
+            app = "ewm-main-service";
+        }
+
+        List<ViewStats> stats = statsService.getStats(start, end, urisOptional, unique, app);
         log.debug("Returning {} stats records", stats.size());
 
         return ResponseEntity.ok(stats);

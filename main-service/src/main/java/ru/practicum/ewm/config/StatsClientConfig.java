@@ -15,6 +15,10 @@ public class StatsClientConfig {
 
     @Bean
     public StatsClient statsClient(RestTemplate restTemplate) {
-        return new StatsClient(restTemplate, "http://localhost:9090");
+        String statsServerUrl = System.getenv("STATS_SERVER_URL");
+        if (statsServerUrl == null) {
+            statsServerUrl = "http://localhost:9090";
+        }
+        return new StatsClient(restTemplate, statsServerUrl);
     }
 } 

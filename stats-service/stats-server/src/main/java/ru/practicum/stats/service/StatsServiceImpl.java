@@ -19,7 +19,7 @@ import java.util.Optional;
 @Transactional
 public class StatsServiceImpl implements StatsService {
     private final EndpointHitRepository repository;
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
 
     @Override
     public EndpointHit saveHit(EndpointHit hitDto) {
@@ -43,19 +43,23 @@ public class StatsServiceImpl implements StatsService {
     @Override
     @Transactional(readOnly = true)
     public List<ViewStats> getStats(LocalDateTime start, LocalDateTime end,
-                                    Optional<List<String>> uris, boolean unique) {
-        log.debug("Getting stats: start={}, end={}, uris={}, unique={}",
-                start, end, uris.orElse(null), unique);
+                                    Optional<List<String>> uris, boolean unique, String app) {
+        log.debug("Getting stats: start={}, end={}, uris={}, unique={}, app={}",
+                start, end, uris.orElse(null), unique, app);
 
         List<String> uriList = uris.orElse(null);
+        if (uriList != null && uriList.isEmpty()) {
+            uriList = null;
+        }
+        
         List<ViewStats> stats;
 
         if (unique) {
             log.debug("Getting unique stats");
-            stats = repository.getStatsUnique(start, end, uriList);
+            stats = repository.getStatsUnique(start, end, uriList, app);
         } else {
             log.debug("Getting non-unique stats");
-            stats = repository.getStats(start, end, uriList);
+            stats = repository.getStats(start, end, uriList, app);
         }
 
         log.info("Returning {} stats records", stats.size());

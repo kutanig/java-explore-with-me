@@ -46,9 +46,7 @@ services:
       stats-server:
         condition: service_started
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://ewm-db:5432/ewm
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_PROFILES_ACTIVE: dev
       STATS_SERVER_URL: http://stats-server:9090
     restart: on-failure
 

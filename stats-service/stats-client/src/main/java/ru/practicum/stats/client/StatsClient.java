@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 public class StatsClient {
     private final RestTemplate restTemplate;
     private final String serverUrl;
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
 
     public StatsClient(RestTemplate restTemplate,
                        @Value("${stats.server.url:http://localhost:9090}")
@@ -56,7 +56,13 @@ public class StatsClient {
     public Long getViews(String appName, Long eventId, LocalDateTime start, LocalDateTime end, boolean unique) {
         List<String> uris = List.of("/events/" + eventId);
         List<ViewStats> stats = getStats(appName, start, end, uris, unique);
-        return stats.isEmpty() ? 0L : stats.get(0).getHits();
+        
+        String targetUri = "/events/" + eventId;
+        return stats.stream()
+                .filter(stat -> targetUri.equals(stat.getUri()))
+                .findFirst()
+                .map(ViewStats::getHits)
+                .orElse(0L);
     }
 
     public Map<Long, Long> getViewsForEvents(String appName, List<Long> eventIds,
@@ -87,7 +93,8 @@ public class StatsClient {
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(serverUrl + "/stats")
                 .queryParam("start", start.format(FORMATTER))
                 .queryParam("end", end.format(FORMATTER))
-                .queryParam("unique", unique);
+                .queryParam("unique", unique)
+                .queryParam("app", appName);
 
         if (uris != null && !uris.isEmpty()) {
             for (String uri : uris) {
@@ -100,7 +107,9 @@ public class StatsClient {
                     builder.toUriString(),
                     ViewStats[].class);
             List<ViewStats> stats = Arrays.asList(response.getBody());
-            log.debug("Successfully retrieved {} stats records", stats.size());
+            
+            log.debug("Successfully retrieved {} stats records for app {}", 
+                    stats.size(), appName);
             return stats;
         } catch (Exception e) {
             log.warn("Failed to get stats from stats service: {}", e.getMessage());
