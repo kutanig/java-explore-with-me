@@ -96,4 +96,4 @@ public class ValidationServiceImpl implements ValidationService {
             throw new BadRequestException("Category name must be between 1 and 50 characters");
         }
     }
-} 
+}

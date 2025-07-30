@@ -21,4 +21,4 @@ public class StatsClientConfig {
         }
         return new StatsClient(restTemplate, statsServerUrl);
     }
-} 
+}
