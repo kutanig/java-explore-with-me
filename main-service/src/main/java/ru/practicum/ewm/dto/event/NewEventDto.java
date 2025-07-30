@@ -29,10 +29,10 @@ public class NewEventDto {
     @NotNull
     private String eventDate;
 
-    private LocationDto locationDto;
+    private LocationDto location;
 
     private Boolean paid = false;
-    
+
     @Min(0)
     private Integer participantLimit = 0;
     

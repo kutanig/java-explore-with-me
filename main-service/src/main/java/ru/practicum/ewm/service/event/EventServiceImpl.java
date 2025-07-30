@@ -169,7 +169,7 @@ public class EventServiceImpl implements EventService {
                 .description(newEventDto.getDescription())
                 .eventDate(eventDate)
                 .initiator(user)
-                .location(newEventDto.getLocationDto() != null ? locationMapper.toModel(newEventDto.getLocationDto()) : null)
+                .location(newEventDto.getLocation() != null ? locationMapper.toModel(newEventDto.getLocation()) : null)
                 .paid(newEventDto.getPaid() != null ? newEventDto.getPaid() : false)
                 .participantLimit(newEventDto.getParticipantLimit() != null ? newEventDto.getParticipantLimit() : 0)
                 .requestModeration(newEventDto.getRequestModeration() != null ? newEventDto.getRequestModeration() : true)
