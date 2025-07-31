@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 public class StatsClient {
     private final RestTemplate restTemplate;
     private final String serverUrl;
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public StatsClient(RestTemplate restTemplate,
                        @Value("${stats.server.url:http://localhost:9090}")

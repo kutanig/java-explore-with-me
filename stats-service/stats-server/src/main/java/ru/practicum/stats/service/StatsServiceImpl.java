@@ -19,7 +19,7 @@ import java.util.Optional;
 @Transactional
 public class StatsServiceImpl implements StatsService {
     private final EndpointHitRepository repository;
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Override
     public EndpointHit saveHit(EndpointHit hitDto) {
@@ -56,10 +56,10 @@ public class StatsServiceImpl implements StatsService {
 
         if (unique) {
             log.debug("Getting unique stats");
-            stats = repository.getStatsUnique(start, end, uriList, app);
+            stats = repository.getStatsUnique(start, end, uriList);
         } else {
             log.debug("Getting non-unique stats");
-            stats = repository.getStats(start, end, uriList, app);
+            stats = repository.getStats(start, end, uriList);
         }
 
         log.info("Returning {} stats records", stats.size());

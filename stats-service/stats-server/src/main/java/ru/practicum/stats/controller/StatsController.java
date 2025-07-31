@@ -32,8 +32,8 @@ public class StatsController {
 
     @GetMapping("/stats")
     public ResponseEntity<List<ViewStats>> getStats(
-            @RequestParam("start") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime start,
-            @RequestParam("end") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime end,
+            @RequestParam("start") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime start,
+            @RequestParam("end") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime end,
             @RequestParam(value = "uris", required = false) List<String> uris,
             @RequestParam(value = "unique", required = false, defaultValue = "false") Boolean unique,
             @RequestParam(value = "app", required = false) String app
@@ -49,10 +49,6 @@ public class StatsController {
         Optional<List<String>> urisOptional = Optional.ofNullable(uris);
         if (urisOptional.isPresent() && urisOptional.get().isEmpty()) {
             urisOptional = Optional.empty();
-        }
-
-        if (app == null) {
-            app = "ewm-main-service";
         }
 
         List<ViewStats> stats = statsService.getStats(start, end, urisOptional, unique, app);
