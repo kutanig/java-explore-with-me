@@ -7,7 +7,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-import ru.practicum.stats.dto.EndpointHit;
+import ru.practicum.stats.dto.EndpointHitDto;
 import ru.practicum.stats.dto.ViewStats;
 
 import java.time.LocalDateTime;
@@ -34,7 +34,7 @@ public class StatsClient {
     }
 
     public void recordHit(String appName, String uri, String ip, LocalDateTime timestamp) {
-        EndpointHit hit = EndpointHit.builder()
+        EndpointHitDto hit = EndpointHitDto.builder()
                 .app(appName)
                 .uri(uri)
                 .ip(ip)
@@ -43,7 +43,7 @@ public class StatsClient {
         saveHit(hit);
     }
 
-    public void saveHit(EndpointHit hit) {
+    public void saveHit(EndpointHitDto hit) {
         log.debug("Sending hit to stats service: {}", hit);
         try {
             restTemplate.postForEntity(serverUrl + "/hit", hit, Void.class);

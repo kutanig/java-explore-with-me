@@ -8,7 +8,7 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class EndpointHit {
+public class EndpointHitDto {
     private Long id;
 
     @NotBlank(message = "App cannot be blank")

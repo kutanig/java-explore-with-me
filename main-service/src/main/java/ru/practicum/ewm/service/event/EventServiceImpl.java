@@ -186,9 +186,7 @@ public class EventServiceImpl implements EventService {
         Event savedEvent = eventRepository.save(event);
         log.info("Created event with id: {}", savedEvent.getId());
 
-        long views = statsClient.getViews(APP_NAME, savedEvent.getId(), LocalDateTime.of(2020, 1, 1, 0, 0, 0), LocalDateTime.now(), true);
-
-        return eventMapper.toFullDto(savedEvent, 0L, views);
+        return eventMapper.toFullDto(savedEvent, 0L, 0L);
     }
 
     @Override

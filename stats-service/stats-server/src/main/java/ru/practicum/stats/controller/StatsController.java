@@ -7,7 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.stats.dto.EndpointHit;
+import ru.practicum.stats.dto.EndpointHitDto;
 import ru.practicum.stats.dto.ViewStats;
 import ru.practicum.stats.service.StatsService;
 
@@ -22,7 +22,7 @@ public class StatsController {
 
     @PostMapping("/hit")
     @ResponseStatus(HttpStatus.CREATED)
-    public void hit(@Valid @RequestBody EndpointHit hitDto) {
+    public void hit(@Valid @RequestBody EndpointHitDto hitDto) {
         log.info("Received hit request: app={}, uri={}, ip={}",
                 hitDto.getApp(), hitDto.getUri(), hitDto.getIp());
         statsService.saveHit(hitDto);

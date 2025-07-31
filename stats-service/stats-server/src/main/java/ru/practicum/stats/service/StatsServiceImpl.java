@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.stats.dto.EndpointHit;
+import ru.practicum.stats.dto.EndpointHitDto;
 import ru.practicum.stats.dto.ViewStats;
 import ru.practicum.stats.repository.EndpointHitRepository;
 
@@ -21,7 +21,7 @@ public class StatsServiceImpl implements StatsService {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Override
-    public void saveHit(EndpointHit hitDto) {
+    public void saveHit(EndpointHitDto hitDto) {
         log.debug("Saving hit: app={}, uri={}, ip={}, timestamp={}",
                 hitDto.getApp(), hitDto.getUri(), hitDto.getIp(), hitDto.getTimestamp());
 
