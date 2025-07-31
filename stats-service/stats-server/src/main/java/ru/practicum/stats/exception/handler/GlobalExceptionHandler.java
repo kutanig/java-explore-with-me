@@ -3,10 +3,12 @@ package ru.practicum.stats.exception.handler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import jakarta.validation.ConstraintViolationException;
 import java.time.format.DateTimeParseException;
 import java.util.Map;
 
@@ -25,7 +27,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, String>> handleDateTimeParseException(DateTimeParseException e) {
         log.error("DateTimeParseException: {}", e.getMessage());
         return ResponseEntity.badRequest()
-                .body(Map.of("error", "Invalid date format. Expected format: yyyy-MM-dd'T'HH:mm"));
+                .body(Map.of("error", "Invalid date format. Expected format: yyyy-MM-dd HH:mm:ss"));
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
@@ -33,6 +35,20 @@ public class GlobalExceptionHandler {
         log.error("MethodArgumentTypeMismatchException: {}", e.getMessage());
         return ResponseEntity.badRequest()
                 .body(Map.of("error", "Invalid parameter type: " + e.getName()));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Map<String, String>> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        log.error("MethodArgumentNotValidException: {}", e.getMessage());
+        return ResponseEntity.badRequest()
+                .body(Map.of("error", "Validation failed: " + e.getBindingResult().getFieldError().getDefaultMessage()));
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<Map<String, String>> handleConstraintViolationException(ConstraintViolationException e) {
+        log.error("ConstraintViolationException: {}", e.getMessage());
+        return ResponseEntity.badRequest()
+                .body(Map.of("error", "Validation failed: " + e.getMessage()));
     }
 
     @ExceptionHandler(Exception.class)

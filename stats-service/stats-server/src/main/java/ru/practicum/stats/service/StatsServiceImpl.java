@@ -11,7 +11,6 @@ import ru.practicum.stats.repository.EndpointHitRepository;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -22,7 +21,7 @@ public class StatsServiceImpl implements StatsService {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Override
-    public EndpointHit saveHit(EndpointHit hitDto) {
+    public void saveHit(EndpointHit hitDto) {
         log.debug("Saving hit: app={}, uri={}, ip={}, timestamp={}",
                 hitDto.getApp(), hitDto.getUri(), hitDto.getIp(), hitDto.getTimestamp());
 
@@ -33,28 +32,25 @@ public class StatsServiceImpl implements StatsService {
                 .timestamp(LocalDateTime.parse(hitDto.getTimestamp(), FORMATTER))
                 .build();
 
-        ru.practicum.stats.model.EndpointHit saved = repository.save(entity);
-        hitDto.setId(saved.getId());
-
-        log.info("Hit saved successfully with id={}", saved.getId());
-        return hitDto;
+        repository.save(entity);
+        log.info("Hit saved successfully");
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<ViewStats> getStats(LocalDateTime start, LocalDateTime end,
-                                    Optional<List<String>> uris, boolean unique, String app) {
-        log.debug("Getting stats: start={}, end={}, uris={}, unique={}, app={}",
-                start, end, uris.orElse(null), unique, app);
+                                    List<String> uris, Boolean unique) {
+        log.debug("Getting stats: start={}, end={}, uris={}, unique={}",
+                start, end, uris, unique);
 
-        List<String> uriList = uris.orElse(null);
+        List<String> uriList = uris;
         if (uriList != null && uriList.isEmpty()) {
             uriList = null;
         }
 
         List<ViewStats> stats;
 
-        if (unique) {
+        if (unique != null && unique) {
             log.debug("Getting unique stats");
             stats = repository.getStatsUnique(start, end, uriList);
         } else {

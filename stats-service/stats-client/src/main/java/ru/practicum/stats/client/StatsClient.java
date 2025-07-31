@@ -55,7 +55,7 @@ public class StatsClient {
 
     public Long getViews(String appName, Long eventId, LocalDateTime start, LocalDateTime end, boolean unique) {
         List<String> uris = List.of("/events/" + eventId);
-        List<ViewStats> stats = getStats(appName, start, end, uris, unique);
+        List<ViewStats> stats = getStats(start, end, uris, unique);
 
         String targetUri = "/events/" + eventId;
         return stats.stream()
@@ -76,7 +76,7 @@ public class StatsClient {
                 .map(id -> "/events/" + id)
                 .collect(Collectors.toList());
 
-        List<ViewStats> stats = getStats(appName, start, end, uris, unique);
+        List<ViewStats> stats = getStats(start, end, uris, unique);
 
         return stats.stream()
                 .collect(Collectors.toMap(
@@ -85,16 +85,15 @@ public class StatsClient {
                         (existing, replacement) -> existing));
     }
 
-    public List<ViewStats> getStats(String appName, LocalDateTime start, LocalDateTime end,
+    public List<ViewStats> getStats(LocalDateTime start, LocalDateTime end,
                                     @Nullable List<String> uris, boolean unique) {
-        log.debug("Requesting stats for app {} from {} to {}, uris: {}, unique: {}",
-                appName, start, end, uris, unique);
+        log.debug("Requesting stats from {} to {}, uris: {}, unique: {}",
+                start, end, uris, unique);
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(serverUrl + "/stats")
                 .queryParam("start", start.format(FORMATTER))
                 .queryParam("end", end.format(FORMATTER))
-                .queryParam("unique", unique)
-                .queryParam("app", appName);
+                .queryParam("unique", unique);
 
         if (uris != null && !uris.isEmpty()) {
             for (String uri : uris) {
@@ -108,8 +107,7 @@ public class StatsClient {
                     ViewStats[].class);
             List<ViewStats> stats = Arrays.asList(response.getBody());
 
-            log.debug("Successfully retrieved {} stats records for app {}",
-                    stats.size(), appName);
+            log.debug("Successfully retrieved {} stats records", stats.size());
             return stats;
         } catch (Exception e) {
             log.warn("Failed to get stats from stats service: {}", e.getMessage());
