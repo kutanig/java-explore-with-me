@@ -65,9 +65,9 @@ public class EventServiceImpl implements EventService {
 
         long confirmedRequests = requestRepository.countByEventIdAndStatus(id, ParticipationRequestStatus.CONFIRMED);
 
-        long views = statsClient.getViews(APP_NAME, id, LocalDateTime.of(2020, 1, 1, 0, 0, 0), LocalDateTime.now(), true);
-
         statsClient.recordHit(APP_NAME, request.getRequestURI(), request.getRemoteAddr(), LocalDateTime.now());
+
+        long views = statsClient.getViews(APP_NAME, id, LocalDateTime.of(2020, 1, 1, 0, 0, 0), LocalDateTime.now(), true);
 
         log.info("Found public event: {}", event.getTitle());
         return eventMapper.toFullDto(event, confirmedRequests, views);
@@ -114,6 +114,8 @@ public class EventServiceImpl implements EventService {
 
         List<Long> eventIds = events.stream().map(Event::getId).collect(Collectors.toList());
 
+        statsClient.recordHit(APP_NAME, request.getRequestURI(), request.getRemoteAddr(), LocalDateTime.now());
+
         Map<Long, Long> viewsMap = statsClient.getViewsForEvents(APP_NAME, eventIds,
                 LocalDateTime.of(2020, 1, 1, 0, 0, 0), LocalDateTime.now(), true);
 
@@ -122,8 +124,6 @@ public class EventServiceImpl implements EventService {
                         id -> id,
                         id -> requestRepository.countByEventIdAndStatus(id, ParticipationRequestStatus.CONFIRMED)
                 ));
-
-        statsClient.recordHit(APP_NAME, request.getRequestURI(), request.getRemoteAddr(), LocalDateTime.now());
 
         log.info("Found {} public events", events.size());
         return events.stream()
