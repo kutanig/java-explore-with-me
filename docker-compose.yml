@@ -46,7 +46,6 @@ services:
       stats-server:
         condition: service_started
     environment:
-      SPRING_PROFILES_ACTIVE: dev
       STATS_SERVER_URL: http://stats-server:9090
     restart: on-failure
 
