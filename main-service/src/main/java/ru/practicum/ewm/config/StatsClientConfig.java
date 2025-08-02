@@ -1,5 +1,6 @@
 package ru.practicum.ewm.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
@@ -14,11 +15,8 @@ public class StatsClientConfig {
     }
 
     @Bean
-    public StatsClient statsClient(RestTemplate restTemplate) {
-        String statsServerUrl = System.getenv("STATS_SERVER_URL");
-        if (statsServerUrl == null) {
-            statsServerUrl = "http://localhost:9090";
-        }
+    public StatsClient statsClient(RestTemplate restTemplate, @Value("${stats.server.url}") String statsServerUrl) {
+
         return new StatsClient(restTemplate, statsServerUrl);
     }
 }
