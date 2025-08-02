@@ -1,0 +1,9 @@
+DROP TABLE IF EXISTS endpoint_hit CASCADE;
+
+CREATE TABLE endpoint_hit (
+    id BIGSERIAL PRIMARY KEY,
+    app VARCHAR(255) NOT NULL,
+    uri VARCHAR(255) NOT NULL,
+    ip VARCHAR(50) NOT NULL,
+    timestamp TIMESTAMP NOT NULL
+);
