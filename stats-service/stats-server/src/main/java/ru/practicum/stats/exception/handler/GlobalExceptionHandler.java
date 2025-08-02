@@ -12,51 +12,66 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 import java.time.format.DateTimeParseException;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<Map<String, String>> handleIllegalArgumentException(IllegalArgumentException e) {
         log.error("IllegalArgumentException: {}", e.getMessage());
         return ResponseEntity.badRequest()
                 .body(Map.of("error", e.getMessage()));
     }
 
-    @ExceptionHandler(DateTimeParseException.class)
     public ResponseEntity<Map<String, String>> handleDateTimeParseException(DateTimeParseException e) {
         log.error("DateTimeParseException: {}", e.getMessage());
         return ResponseEntity.badRequest()
                 .body(Map.of("error", "Invalid date format. Expected format: yyyy-MM-dd HH:mm:ss"));
     }
 
-    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<Map<String, String>> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
         log.error("MethodArgumentTypeMismatchException: {}", e.getMessage());
         return ResponseEntity.badRequest()
                 .body(Map.of("error", "Invalid parameter type: " + e.getName()));
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-        log.error("MethodArgumentNotValidException: {}", e.getMessage());
-        return ResponseEntity.badRequest()
-                .body(Map.of("error", "Validation failed: " + e.getBindingResult().getFieldError().getDefaultMessage()));
-    }
-
-    @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<Map<String, String>> handleConstraintViolationException(ConstraintViolationException e) {
-        log.error("ConstraintViolationException: {}", e.getMessage());
-        return ResponseEntity.badRequest()
-                .body(Map.of("error", "Validation failed: " + e.getMessage()));
-    }
-
-    @ExceptionHandler(MissingServletRequestParameterException.class)
     public ResponseEntity<Map<String, String>> handleMissingServletRequestParameterException(MissingServletRequestParameterException e) {
         log.error("MissingServletRequestParameterException: {}", e.getMessage());
         return ResponseEntity.badRequest()
                 .body(Map.of("error", "Required parameter is missing: " + e.getParameterName()));
+    }
+
+    @ExceptionHandler({
+            MethodArgumentNotValidException.class,
+            ConstraintViolationException.class
+    })
+    public ResponseEntity<Map<String, String>> handleValidationExceptions(Exception e) {
+        String errorMessage;
+
+        if (e instanceof MethodArgumentNotValidException) {
+            errorMessage = ((MethodArgumentNotValidException) e).getBindingResult()
+                    .getFieldErrors()
+                    .stream()
+                    .map(fieldError -> String.format("[%s] %s",
+                            fieldError.getField(),
+                            fieldError.getDefaultMessage()))
+                    .collect(Collectors.joining("; "));
+        } else {
+            errorMessage = ((ConstraintViolationException) e).getConstraintViolations()
+                    .stream()
+                    .map(violation -> String.format("[%s] %s",
+                            violation.getPropertyPath(),
+                            violation.getMessage()))
+                    .collect(Collectors.joining("; "));
+        }
+
+        log.error("Validation error: {}", errorMessage);
+        return ResponseEntity.badRequest()
+                .body(Map.of(
+                        "error", "Validation failed",
+                        "details", errorMessage
+                ));
     }
 
     @ExceptionHandler(Exception.class)

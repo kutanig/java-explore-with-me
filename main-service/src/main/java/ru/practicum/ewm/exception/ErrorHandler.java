@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 public class ErrorHandler {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-    @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ApiError handleNotFoundException(final NotFoundException e) {
         return new ApiError(
@@ -37,7 +36,6 @@ public class ErrorHandler {
         );
     }
 
-    @ExceptionHandler(ConflictException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public ApiError handleConflictException(final ConflictException e) {
         return new ApiError(
@@ -49,7 +47,6 @@ public class ErrorHandler {
         );
     }
 
-    @ExceptionHandler(ForbiddenException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ApiError handleForbiddenException(final ForbiddenException e) {
         return new ApiError(
@@ -61,7 +58,6 @@ public class ErrorHandler {
         );
     }
 
-    @ExceptionHandler(BadRequestException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiError handleBadRequestException(final BadRequestException e) {
         return new ApiError(
@@ -73,33 +69,16 @@ public class ErrorHandler {
         );
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ExceptionHandler({MethodArgumentNotValidException.class, BindException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiError handleMethodArgumentNotValidException(final MethodArgumentNotValidException e) {
+    public ApiError handleValidationExceptions(BindException e) {
         List<String> errors = e.getBindingResult().getFieldErrors().stream()
                 .map(error -> String.format("Field: %s. Error: %s. Value: %s",
                         error.getField(),
                         error.getDefaultMessage(),
                         error.getRejectedValue()))
                 .collect(Collectors.toList());
-        return new ApiError(
-                errors,
-                "Validation failed",
-                "Incorrectly made request.",
-                "BAD_REQUEST",
-                LocalDateTime.now().format(FORMATTER)
-        );
-    }
 
-    @ExceptionHandler(BindException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiError handleBindException(final BindException e) {
-        List<String> errors = e.getBindingResult().getFieldErrors().stream()
-                .map(error -> String.format("Field: %s. Error: %s. Value: %s",
-                        error.getField(),
-                        error.getDefaultMessage(),
-                        error.getRejectedValue()))
-                .collect(Collectors.toList());
         return new ApiError(
                 errors,
                 "Validation failed",
@@ -127,18 +106,6 @@ public class ErrorHandler {
         );
     }
 
-    @ExceptionHandler(MissingServletRequestParameterException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiError handleMissingServletRequestParameterException(final MissingServletRequestParameterException e) {
-        return new ApiError(
-                Collections.singletonList(e.getMessage()),
-                "Required parameter is missing",
-                "Incorrectly made request.",
-                "BAD_REQUEST",
-                LocalDateTime.now().format(FORMATTER)
-        );
-    }
-
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiError handleMethodArgumentTypeMismatchException(final MethodArgumentTypeMismatchException e) {
@@ -155,19 +122,25 @@ public class ErrorHandler {
         );
     }
 
-    @ExceptionHandler(HttpMessageNotReadableException.class)
+    @ExceptionHandler({
+            MissingServletRequestParameterException.class,
+            HttpMessageNotReadableException.class
+    })
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiError handleHttpMessageNotReadableException(final HttpMessageNotReadableException e) {
+    public ApiError handleRequestErrors(Exception e) {
+        String message = e instanceof MissingServletRequestParameterException
+                ? "Required parameter is missing: " + ((MissingServletRequestParameterException) e).getParameterName()
+                : "Invalid request body format";
+
         return new ApiError(
                 Collections.singletonList(e.getMessage()),
-                "Invalid request body format",
+                message,
                 "Incorrectly made request.",
                 "BAD_REQUEST",
                 LocalDateTime.now().format(FORMATTER)
         );
     }
 
-    @ExceptionHandler(DataIntegrityViolationException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public ApiError handleDataIntegrityViolationException(final DataIntegrityViolationException e) {
         return new ApiError(
@@ -179,7 +152,6 @@ public class ErrorHandler {
         );
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiError handleIllegalArgumentException(final IllegalArgumentException e) {
         return new ApiError(
@@ -187,19 +159,6 @@ public class ErrorHandler {
                 e.getMessage(),
                 "Incorrectly made request.",
                 "BAD_REQUEST",
-                LocalDateTime.now().format(FORMATTER)
-        );
-    }
-
-    @ExceptionHandler(RuntimeException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ApiError handleRuntimeException(final RuntimeException e) {
-        log.error("Runtime exception: ", e);
-        return new ApiError(
-                Collections.singletonList(e.getMessage()),
-                "Internal server error.",
-                "Internal server error.",
-                "INTERNAL_SERVER_ERROR",
                 LocalDateTime.now().format(FORMATTER)
         );
     }
