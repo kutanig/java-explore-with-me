@@ -18,24 +18,28 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler
     public ResponseEntity<Map<String, String>> handleIllegalArgumentException(IllegalArgumentException e) {
         log.error("IllegalArgumentException: {}", e.getMessage());
         return ResponseEntity.badRequest()
                 .body(Map.of("error", e.getMessage()));
     }
 
+    @ExceptionHandler
     public ResponseEntity<Map<String, String>> handleDateTimeParseException(DateTimeParseException e) {
         log.error("DateTimeParseException: {}", e.getMessage());
         return ResponseEntity.badRequest()
                 .body(Map.of("error", "Invalid date format. Expected format: yyyy-MM-dd HH:mm:ss"));
     }
 
+    @ExceptionHandler
     public ResponseEntity<Map<String, String>> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
         log.error("MethodArgumentTypeMismatchException: {}", e.getMessage());
         return ResponseEntity.badRequest()
                 .body(Map.of("error", "Invalid parameter type: " + e.getName()));
     }
 
+    @ExceptionHandler
     public ResponseEntity<Map<String, String>> handleMissingServletRequestParameterException(MissingServletRequestParameterException e) {
         log.error("MissingServletRequestParameterException: {}", e.getMessage());
         return ResponseEntity.badRequest()

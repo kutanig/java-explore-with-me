@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 public class ErrorHandler {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
+    @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ApiError handleNotFoundException(final NotFoundException e) {
         return new ApiError(
@@ -36,6 +37,7 @@ public class ErrorHandler {
         );
     }
 
+    @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
     public ApiError handleConflictException(final ConflictException e) {
         return new ApiError(
@@ -47,6 +49,7 @@ public class ErrorHandler {
         );
     }
 
+    @ExceptionHandler
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ApiError handleForbiddenException(final ForbiddenException e) {
         return new ApiError(
@@ -58,6 +61,7 @@ public class ErrorHandler {
         );
     }
 
+    @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiError handleBadRequestException(final BadRequestException e) {
         return new ApiError(
@@ -141,6 +145,7 @@ public class ErrorHandler {
         );
     }
 
+    @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
     public ApiError handleDataIntegrityViolationException(final DataIntegrityViolationException e) {
         return new ApiError(
@@ -152,6 +157,7 @@ public class ErrorHandler {
         );
     }
 
+    @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiError handleIllegalArgumentException(final IllegalArgumentException e) {
         return new ApiError(
