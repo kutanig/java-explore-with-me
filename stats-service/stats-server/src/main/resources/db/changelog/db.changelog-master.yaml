@@ -2,7 +2,11 @@ databaseChangeLog:
   - changeSet:
       id: "1"
       author: "kutanig"
+      runAlways: true
       changes:
+        - dropTable:
+            tableName: endpoint_hit
+            cascadeConstraints: true
         - createTable:
             tableName: "endpoint_hit"
             columns:
