@@ -7,13 +7,16 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-import ru.practicum.stats.dto.EndpointHit;
+import ru.practicum.stats.dto.EndpointHitDto;
 import ru.practicum.stats.dto.ViewStats;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -23,22 +26,63 @@ public class StatsClient {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public StatsClient(RestTemplate restTemplate,
-                       @Value("${services.stats-service.server-url:http://localhost:9090}")
+                       @Value("${stats.server.url:http://localhost:9090}")
                        String serverUrl) {
         this.restTemplate = restTemplate;
         this.serverUrl = serverUrl;
         log.info("Initializing StatsClient with server URL: {}", serverUrl);
     }
 
-    public void saveHit(EndpointHit hit) {
+    public void recordHit(String appName, String uri, String ip, LocalDateTime timestamp) {
+        EndpointHitDto hit = EndpointHitDto.builder()
+                .app(appName)
+                .uri(uri)
+                .ip(ip)
+                .timestamp(timestamp.format(FORMATTER))
+                .build();
+        saveHit(hit);
+    }
+
+    public void saveHit(EndpointHitDto hit) {
         log.debug("Sending hit to stats service: {}", hit);
         try {
             restTemplate.postForEntity(serverUrl + "/hit", hit, Void.class);
             log.debug("Successfully sent hit to stats service");
         } catch (Exception e) {
-            log.error("Failed to send hit to stats service", e);
-            throw e;
+            log.warn("Failed to send hit to stats service: {}", e.getMessage());
         }
+    }
+
+    public Long getViews(String appName, Long eventId, LocalDateTime start, LocalDateTime end, boolean unique) {
+        List<String> uris = List.of("/events/" + eventId);
+        List<ViewStats> stats = getStats(start, end, uris, unique);
+
+        String targetUri = "/events/" + eventId;
+        return stats.stream()
+                .filter(stat -> targetUri.equals(stat.getUri()))
+                .findFirst()
+                .map(ViewStats::getHits)
+                .orElse(0L);
+    }
+
+    public Map<Long, Long> getViewsForEvents(String appName, List<Long> eventIds,
+                                             LocalDateTime start, LocalDateTime end,
+                                             boolean unique) {
+        if (eventIds == null || eventIds.isEmpty()) {
+            return Collections.emptyMap();
+        }
+
+        List<String> uris = eventIds.stream()
+                .map(id -> "/events/" + id)
+                .collect(Collectors.toList());
+
+        List<ViewStats> stats = getStats(start, end, uris, unique);
+
+        return stats.stream()
+                .collect(Collectors.toMap(
+                        s -> parseEventIdFromUri(s.getUri()),
+                        ViewStats::getHits,
+                        (existing, replacement) -> existing));
     }
 
     public List<ViewStats> getStats(LocalDateTime start, LocalDateTime end,
@@ -47,24 +91,36 @@ public class StatsClient {
                 start, end, uris, unique);
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(serverUrl + "/stats")
-                .queryParam("start", FORMATTER.format(start))
-                .queryParam("end", FORMATTER.format(end))
+                .queryParam("start", start.format(FORMATTER))
+                .queryParam("end", end.format(FORMATTER))
                 .queryParam("unique", unique);
 
         if (uris != null && !uris.isEmpty()) {
-            builder.queryParam("uris", String.join(",", uris));
+            for (String uri : uris) {
+                builder.queryParam("uris", uri);
+            }
         }
 
         try {
             ResponseEntity<ViewStats[]> response = restTemplate.getForEntity(
                     builder.toUriString(),
-                    ViewStats[].class
-            );
-            log.debug("Received stats response with {} items", response.getBody().length);
-            return Arrays.asList(response.getBody());
+                    ViewStats[].class);
+            List<ViewStats> stats = Arrays.asList(response.getBody());
+
+            log.debug("Successfully retrieved {} stats records", stats.size());
+            return stats;
         } catch (Exception e) {
-            log.error("Failed to get stats from stats service", e);
-            throw e;
+            log.warn("Failed to get stats from stats service: {}", e.getMessage());
+            return Collections.emptyList();
+        }
+    }
+
+    private Long parseEventIdFromUri(String uri) {
+        try {
+            return Long.parseLong(uri.substring(uri.lastIndexOf('/') + 1));
+        } catch (Exception e) {
+            log.error("Failed to parse event ID from URI: {}", uri, e);
+            throw new IllegalArgumentException("Invalid event URI format: " + uri);
         }
     }
 }
