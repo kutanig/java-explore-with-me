@@ -144,14 +144,12 @@ public class CompilationServiceImpl implements CompilationService {
                 .map(Event::getId)
                 .collect(Collectors.toList());
 
-        Map<Long, Long> result = new HashMap<>();
-        for (Long eventId : eventIds) {
-            long count = requestRepository.countByEventIdAndStatus(
-                    eventId,
-                    ParticipationRequestStatus.CONFIRMED);
-            result.put(eventId, count);
-        }
-        return result;
+        return requestRepository.countByEventIdInAndStatus(eventIds, ParticipationRequestStatus.CONFIRMED)
+                .stream()
+                .collect(Collectors.toMap(
+                        RequestRepository.RequestCountProjection::getEventId,
+                        RequestRepository.RequestCountProjection::getCount
+                ));
     }
 
     private Map<Long, Long> getViewsCounts(Collection<Event> events) {
