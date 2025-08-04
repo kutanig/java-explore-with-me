@@ -19,6 +19,10 @@ public class EventMapper {
     private final UserMapper userMapper;
 
     public EventFullDto toFullDto(Event event, long confirmedRequests, long views) {
+        return toFullDto(event, confirmedRequests, views, 0L, 0L, 0.0);
+    }
+    
+    public EventFullDto toFullDto(Event event, long confirmedRequests, long views, Long likes, Long dislikes, Double rating) {
         if (event == null) {
             return null;
         }
@@ -40,10 +44,17 @@ public class EventMapper {
                 .state(event.getState().name())
                 .title(event.getTitle())
                 .views(views)
+                .likes(likes)
+                .dislikes(dislikes)
+                .rating(rating)
                 .build();
     }
 
     public EventShortDto toShortDto(Event event, long confirmedRequests, long views) {
+        return toShortDto(event, confirmedRequests, views, 0L, 0L, 0.0);
+    }
+    
+    public EventShortDto toShortDto(Event event, long confirmedRequests, long views, Long likes, Long dislikes, Double rating) {
         if (event == null) {
             return null;
         }
@@ -58,6 +69,9 @@ public class EventMapper {
                 .paid(event.getPaid())
                 .title(event.getTitle())
                 .views(views)
+                .likes(likes)
+                .dislikes(dislikes)
+                .rating(rating)
                 .build();
     }
 
