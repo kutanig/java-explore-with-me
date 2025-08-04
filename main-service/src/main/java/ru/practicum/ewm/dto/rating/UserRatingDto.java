@@ -4,8 +4,8 @@ import lombok.*;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class UserRatingDto {
     private Long userId;
@@ -14,20 +14,24 @@ public class UserRatingDto {
     private Long totalDislikes;
     private Double rating;
     private Long eventsCount;
-    
-    public static UserRatingDto of(Long userId, String userName, Long totalLikes, Long totalDislikes, Long eventsCount) {
-        double rating = 0.0;
-        if (totalLikes + totalDislikes > 0) {
-            rating = ((double) (totalLikes - totalDislikes) / (totalLikes + totalDislikes)) * 100;
+
+    public UserRatingDto(Long userId, String userName, Long totalLikes, Long totalDislikes, Long eventsCount) {
+        this.userId = userId;
+        this.userName = userName;
+        this.totalLikes = totalLikes;
+        this.totalDislikes = totalDislikes;
+        this.eventsCount = eventsCount;
+        this.rating = calculateRating(totalLikes, totalDislikes);
+    }
+
+    private double calculateRating(Long likes, Long dislikes) {
+        if (likes + dislikes > 0) {
+            return ((double) (likes - dislikes) / (likes + dislikes)) * 100;
         }
-        
-        return UserRatingDto.builder()
-                .userId(userId)
-                .userName(userName)
-                .totalLikes(totalLikes)
-                .totalDislikes(totalDislikes)
-                .rating(rating)
-                .eventsCount(eventsCount)
-                .build();
+        return 0.0;
+    }
+
+    public static UserRatingDto of(Long userId, String userName, Long totalLikes, Long totalDislikes, Long eventsCount) {
+        return new UserRatingDto(userId, userName, totalLikes, totalDislikes, eventsCount);
     }
 }
