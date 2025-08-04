@@ -52,3 +52,14 @@ CREATE TABLE IF NOT EXISTS compilation_events (
     CONSTRAINT fk_compilation_events_compilation FOREIGN KEY (compilation_id) REFERENCES compilations(id),
     CONSTRAINT fk_compilation_events_event FOREIGN KEY (event_id) REFERENCES events(id)
 );
+
+CREATE TABLE IF NOT EXISTS ratings (
+    id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    event_id BIGINT NOT NULL,
+    type VARCHAR(10) NOT NULL CHECK (type IN ('LIKE', 'DISLIKE')),
+    created_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_ratings_user FOREIGN KEY (user_id) REFERENCES users(id),
+    CONSTRAINT fk_ratings_event FOREIGN KEY (event_id) REFERENCES events(id),
+    CONSTRAINT uk_ratings_user_event UNIQUE (user_id, event_id)
+);
