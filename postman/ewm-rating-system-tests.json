@@ -7,19 +7,17 @@
   "event": [
     {
       "listen": "prerequest",
-          "script": {
-            "exec": [
-              
-              "const timestamp = Date.now();",
-              "pm.collectionVariables.set('timestamp', timestamp);",
-              "pm.collectionVariables.set('uniqueEmail1', `user${timestamp}@example.com`);",
-              "pm.collectionVariables.set('uniqueEmail2', `user${timestamp + 1}@example.com`);",
-              "pm.collectionVariables.set('uniqueCategoryName', `Категория ${timestamp}`);",
-              "",
-              
-              "console.log('Base URL:', pm.collectionVariables.get('baseUrl'));",
-              "console.log('Timestamp:', timestamp);"
-            ],
+      "script": {
+        "exec": [
+          "const timestamp = Date.now();",
+          "pm.collectionVariables.set('timestamp', timestamp);",
+          "pm.collectionVariables.set('uniqueEmail1', `user${timestamp}@example.com`);",
+          "pm.collectionVariables.set('uniqueEmail2', `user${timestamp + 1}@example.com`);",
+          "pm.collectionVariables.set('uniqueCategoryName', `Категория ${timestamp}`);",
+          "",
+          "console.log('Base URL:', pm.collectionVariables.get('baseUrl'));",
+          "console.log('Timestamp:', timestamp);"
+        ],
         "type": "text/javascript"
       }
     }
@@ -67,8 +65,13 @@
             },
             "url": {
               "raw": "{{baseUrl}}/admin/users",
-              "host": ["{{baseUrl}}"],
-              "path": ["admin", "users"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "users"
+              ]
             }
           }
         },
@@ -112,8 +115,13 @@
             },
             "url": {
               "raw": "{{baseUrl}}/admin/users",
-              "host": ["{{baseUrl}}"],
-              "path": ["admin", "users"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "users"
+              ]
             }
           }
         },
@@ -154,8 +162,13 @@
             },
             "url": {
               "raw": "{{baseUrl}}/admin/categories",
-              "host": ["{{baseUrl}}"],
-              "path": ["admin", "categories"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "categories"
+              ]
             }
           }
         },
@@ -201,8 +214,14 @@
             },
             "url": {
               "raw": "{{baseUrl}}/users/{{user1Id}}/events",
-              "host": ["{{baseUrl}}"],
-              "path": ["users", "{{user1Id}}", "events"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "{{user1Id}}",
+                "events"
+              ]
             }
           }
         },
@@ -248,8 +267,14 @@
             },
             "url": {
               "raw": "{{baseUrl}}/users/{{user2Id}}/events",
-              "host": ["{{baseUrl}}"],
-              "path": ["users", "{{user2Id}}", "events"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "{{user2Id}}",
+                "events"
+              ]
             }
           }
         },
@@ -300,8 +325,14 @@
             },
             "url": {
               "raw": "{{baseUrl}}/admin/events/{{event1Id}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["admin", "events", "{{event1Id}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "events",
+                "{{event1Id}}"
+              ]
             }
           }
         },
@@ -352,8 +383,14 @@
             },
             "url": {
               "raw": "{{baseUrl}}/admin/events/{{event2Id}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["admin", "events", "{{event2Id}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "events",
+                "{{event2Id}}"
+              ]
             }
           }
         }
@@ -396,8 +433,16 @@
             },
             "url": {
               "raw": "{{baseUrl}}/users/{{user2Id}}/events/{{event1Id}}/rating",
-              "host": ["{{baseUrl}}"],
-              "path": ["users", "{{user2Id}}", "events", "{{event1Id}}", "rating"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "{{user2Id}}",
+                "events",
+                "{{event1Id}}",
+                "rating"
+              ]
             }
           }
         },
@@ -435,8 +480,16 @@
             },
             "url": {
               "raw": "{{baseUrl}}/users/{{user1Id}}/events/{{event2Id}}/rating",
-              "host": ["{{baseUrl}}"],
-              "path": ["users", "{{user1Id}}", "events", "{{event2Id}}", "rating"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "{{user1Id}}",
+                "events",
+                "{{event2Id}}",
+                "rating"
+              ]
             }
           }
         },
@@ -469,8 +522,16 @@
             },
             "url": {
               "raw": "{{baseUrl}}/users/{{user1Id}}/events/{{event1Id}}/rating",
-              "host": ["{{baseUrl}}"],
-              "path": ["users", "{{user1Id}}", "events", "{{event1Id}}", "rating"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "{{user1Id}}",
+                "events",
+                "{{event1Id}}",
+                "rating"
+              ]
             }
           }
         },
@@ -507,8 +568,16 @@
             },
             "url": {
               "raw": "{{baseUrl}}/users/{{user2Id}}/events/{{event1Id}}/rating",
-              "host": ["{{baseUrl}}"],
-              "path": ["users", "{{user2Id}}", "events", "{{event1Id}}", "rating"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "{{user2Id}}",
+                "events",
+                "{{event1Id}}",
+                "rating"
+              ]
             }
           }
         },
@@ -531,8 +600,16 @@
             "method": "DELETE",
             "url": {
               "raw": "{{baseUrl}}/users/{{user2Id}}/events/{{event1Id}}/rating",
-              "host": ["{{baseUrl}}"],
-              "path": ["users", "{{user2Id}}", "events", "{{event1Id}}", "rating"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "{{user2Id}}",
+                "events",
+                "{{event1Id}}",
+                "rating"
+              ]
             }
           }
         }
@@ -572,8 +649,14 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/rating/events/{{event1Id}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["rating", "events", "{{event1Id}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rating",
+                "events",
+                "{{event1Id}}"
+              ]
             }
           }
         },
@@ -610,8 +693,14 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/rating/users/{{user1Id}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["rating", "users", "{{user1Id}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rating",
+                "users",
+                "{{user1Id}}"
+              ]
             }
           }
         },
@@ -648,8 +737,14 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/users/{{user1Id}}/rating",
-              "host": ["{{baseUrl}}"],
-              "path": ["users", "{{user1Id}}", "rating"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "{{user1Id}}",
+                "rating"
+              ]
             }
           }
         },
@@ -688,8 +783,14 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/rating/users/top?from=0&size=10",
-              "host": ["{{baseUrl}}"],
-              "path": ["rating", "users", "top"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rating",
+                "users",
+                "top"
+              ],
               "query": [
                 {
                   "key": "from",
@@ -715,7 +816,6 @@
               "listen": "prerequest",
               "script": {
                 "exec": [
-                  
                   "pm.sendRequest({",
                   "    url: pm.collectionVariables.get('baseUrl') + '/users/' + pm.collectionVariables.get('user2Id') + '/events/' + pm.collectionVariables.get('event1Id') + '/rating',",
                   "    method: 'POST',",
@@ -751,8 +851,12 @@
             "method": "GET",
             "url": {
               "raw": "{{baseUrl}}/events",
-              "host": ["{{baseUrl}}"],
-              "path": ["events"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events"
+              ]
             }
           }
         },
@@ -768,13 +872,11 @@
                   "    const responseJson = pm.response.json();",
                   "    pm.expect(responseJson).to.be.an('array');",
                   "    ",
-                  
                   "    if (responseJson.length > 0) {",
                   "        pm.expect(responseJson[0]).to.have.property('likes');",
                   "        pm.expect(responseJson[0]).to.have.property('dislikes');",
                   "        pm.expect(responseJson[0]).to.have.property('rating');",
                   "        ",
-                  
                   "        if (responseJson.length > 1) {",
                   "            for (let i = 0; i < responseJson.length - 1; i++) {",
                   "                pm.expect(responseJson[i].rating).to.be.at.least(responseJson[i + 1].rating);",
@@ -797,8 +899,12 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/events?sort=EVENT_DATE&from=0&size=10",
-              "host": ["{{baseUrl}}"],
-              "path": ["events"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events"
+              ],
               "query": [
                 {
                   "key": "sort",
@@ -828,7 +934,6 @@
                   "    const responseJson = pm.response.json();",
                   "    pm.expect(responseJson).to.be.an('array');",
                   "    ",
-                  
                   "    if (responseJson.length > 0) {",
                   "        pm.expect(responseJson[0]).to.have.property('likes');",
                   "        pm.expect(responseJson[0]).to.have.property('dislikes');",
@@ -850,8 +955,12 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/events?sort=EVENT_DATE&from=0&size=10",
-              "host": ["{{baseUrl}}"],
-              "path": ["events"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events"
+              ],
               "query": [
                 {
                   "key": "sort",
@@ -903,8 +1012,16 @@
             },
             "url": {
               "raw": "{{baseUrl}}/users/{{user1Id}}/events/99999/rating",
-              "host": ["{{baseUrl}}"],
-              "path": ["users", "{{user1Id}}", "events", "99999", "rating"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "{{user1Id}}",
+                "events",
+                "99999",
+                "rating"
+              ]
             }
           }
         },
@@ -937,8 +1054,16 @@
             },
             "url": {
               "raw": "{{baseUrl}}/users/99999/events/{{event1Id}}/rating",
-              "host": ["{{baseUrl}}"],
-              "path": ["users", "99999", "events", "{{event1Id}}", "rating"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "99999",
+                "events",
+                "{{event1Id}}",
+                "rating"
+              ]
             }
           }
         },
@@ -971,8 +1096,16 @@
             },
             "url": {
               "raw": "{{baseUrl}}/users/{{user2Id}}/events/{{event1Id}}/rating",
-              "host": ["{{baseUrl}}"],
-              "path": ["users", "{{user2Id}}", "events", "{{event1Id}}", "rating"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "{{user2Id}}",
+                "events",
+                "{{event1Id}}",
+                "rating"
+              ]
             }
           }
         },
@@ -995,8 +1128,14 @@
             "method": "GET",
             "url": {
               "raw": "{{baseUrl}}/rating/events/99999",
-              "host": ["{{baseUrl}}"],
-              "path": ["rating", "events", "99999"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rating",
+                "events",
+                "99999"
+              ]
             }
           }
         },
@@ -1019,13 +1158,19 @@
             "method": "GET",
             "url": {
               "raw": "{{baseUrl}}/rating/users/99999",
-              "host": ["{{baseUrl}}"],
-              "path": ["rating", "users", "99999"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rating",
+                "users",
+                "99999"
+              ]
             }
           }
         }
       ]
-},
+    },
     {
       "name": "Smoke Tests - Быстрые тесты",
       "item": [
@@ -1060,8 +1205,16 @@
             },
             "url": {
               "raw": "{{baseUrl}}/users/{{user2Id}}/events/{{event1Id}}/rating",
-              "host": ["{{baseUrl}}"],
-              "path": ["users", "{{user2Id}}", "events", "{{event1Id}}", "rating"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "{{user2Id}}",
+                "events",
+                "{{event1Id}}",
+                "rating"
+              ]
             }
           }
         },
@@ -1095,8 +1248,14 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/rating/events/{{event1Id}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["rating", "events", "{{event1Id}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rating",
+                "events",
+                "{{event1Id}}"
+              ]
             }
           }
         },
@@ -1132,8 +1291,14 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/rating/users/{{user1Id}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["rating", "users", "{{user1Id}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rating",
+                "users",
+                "{{user1Id}}"
+              ]
             }
           }
         },
@@ -1164,8 +1329,14 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/rating/users/top?from=0&size=5",
-              "host": ["{{baseUrl}}"],
-              "path": ["rating", "users", "top"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rating",
+                "users",
+                "top"
+              ],
               "query": [
                 {
                   "key": "from",
@@ -1191,7 +1362,6 @@
                   "    const responseJson = pm.response.json();",
                   "    pm.expect(responseJson).to.be.an('array');",
                   "    ",
-                  
                   "    if (responseJson.length > 0) {",
                   "        pm.expect(responseJson[0]).to.have.property('likes');",
                   "        pm.expect(responseJson[0]).to.have.property('dislikes');",
@@ -1213,8 +1383,12 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/events?sort=EVENT_DATE&from=0&size=5",
-              "host": ["{{baseUrl}}"],
-              "path": ["events"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events"
+              ],
               "query": [
                 {
                   "key": "sort",
@@ -1251,8 +1425,16 @@
             "method": "DELETE",
             "url": {
               "raw": "{{baseUrl}}/users/{{user2Id}}/events/{{event1Id}}/rating",
-              "host": ["{{baseUrl}}"],
-              "path": ["users", "{{user2Id}}", "events", "{{event1Id}}", "rating"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "{{user2Id}}",
+                "events",
+                "{{event1Id}}",
+                "rating"
+              ]
             }
           }
         }

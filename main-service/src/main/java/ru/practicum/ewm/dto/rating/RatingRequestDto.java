@@ -10,7 +10,7 @@ import ru.practicum.ewm.model.rating.RatingType;
 @NoArgsConstructor
 @Builder
 public class RatingRequestDto {
-    
+
     @NotNull
     private RatingType type;
 }

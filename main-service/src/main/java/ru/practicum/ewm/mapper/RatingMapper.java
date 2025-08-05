@@ -9,7 +9,7 @@ import ru.practicum.ewm.model.user.User;
 import java.time.LocalDateTime;
 
 public class RatingMapper {
-    
+
     public static RatingDto toDto(Rating rating) {
         return RatingDto.builder()
                 .id(rating.getId())
@@ -19,7 +19,7 @@ public class RatingMapper {
                 .createdOn(rating.getCreatedOn())
                 .build();
     }
-    
+
     public static Rating toEntity(RatingRequestDto requestDto, User user, Event event) {
         return Rating.builder()
                 .user(user)
