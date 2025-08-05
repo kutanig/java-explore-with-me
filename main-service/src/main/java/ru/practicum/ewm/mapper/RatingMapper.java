@@ -6,6 +6,8 @@ import ru.practicum.ewm.model.event.Event;
 import ru.practicum.ewm.model.rating.Rating;
 import ru.practicum.ewm.model.user.User;
 
+import java.time.LocalDateTime;
+
 public class RatingMapper {
     
     public static RatingDto toDto(Rating rating) {
@@ -23,6 +25,7 @@ public class RatingMapper {
                 .user(user)
                 .event(event)
                 .type(requestDto.getType())
+                .createdOn(LocalDateTime.now())
                 .build();
     }
 }
